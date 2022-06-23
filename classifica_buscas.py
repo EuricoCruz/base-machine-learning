@@ -14,6 +14,7 @@ percentual_de_treino = 0.9
 tamanho_do_treino = int(percentual_de_treino * len(X))
 tamanho_do_teste = len(Y) - tamanho_do_treino
 
+#Separa dados de treino e de teste
 treino_dados = X[:tamanho_do_treino]
 treino_marcacoes = Y[:tamanho_do_treino]
 teste_dados = X[-tamanho_do_teste:]
@@ -24,11 +25,17 @@ from sklearn.naive_bayes import MultinomialNB
 modelo = MultinomialNB()
 modelo.fit(treino_dados, treino_marcacoes)
 resultado = modelo.predict(teste_dados)
-diferencas = resultado - teste_marcacoes
-acertos = [d for d in diferencas if d==0]
-total_de_acertos = len(acertos)
+acertos = resultado == teste_marcacoes
+total_de_acertos = sum(acertos)
 total_dos_elementos = len(teste_dados)
-taxa_de_acerto = 100.0 * total_de_acertos / total_de_acertos
+taxa_de_acerto = 100.0 * total_de_acertos / total_dos_elementos
 
-print(total_de_acertos)
+# a eficácia do algoritmo que chuta tudo 0 ou 1
+acerto_de_um =  len(Y[Y=='sim'])
+acerto_de_zero = len(Y[Y=='nao'])
+taxa_de_acertos_base = 100.0 * max(acerto_de_um, acerto_de_zero)
+
+
+print("Total de acertos do algoritmo base: %f" % taxa_de_acertos_base)
+print("Total de acertos do algoritmo: %f" % taxa_de_acerto)
 print(total_dos_elementos)
